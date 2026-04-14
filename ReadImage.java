@@ -46,7 +46,7 @@ public class ReadImage {
                 // Add this to the ascii stringbuilder
                 ascii.append(String.valueOf(bit));
 
-                // When thge ASCII strinbuilder reaches length 8 then this means that it represents an ASCII character
+                // When the ASCII stringbuilder reaches length 8 then this means that it represents an ASCII character
                 if (ascii.length() == 8) {
                     
                     // Get this character using type casting to character and converting the binary string to base-10 int

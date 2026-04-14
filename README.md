@@ -1,22 +1,49 @@
-# Image Steganography - XMas 2024
+# Image Steganography
 
-Scripts for both encoding and decoding data with image steganography.
-
----
+Hide secret messages inside image files using the Least Significant Bit (LSB) technique.
 
 ## How it works
-WriteImage.java: This program takes a plaintext file (.txt) and an image file (.png or .jpg), and then hides the text within the image's pixel data. It outputs a new image file with the hidden message.
 
-ReadImage.java: This program takes an image file containing a hidden message, extracts the LSB from each pixel, and reconstructs the original plaintext message.
+LSB steganography works by replacing the least significant bit of each pixel's color value with one bit of the message. A single-bit change per pixel is imperceptible to the human eye, so the modified image looks identical to the original.
 
-YOU MUST ADD A TILDE (~) AT THE END OF THE PLAINTEXT FILE SO THAT THE PROGRAM STOPS READING IT.
+- **WriteImage.java** — reads a plaintext `.txt` file and embeds it into the pixel data of a `.png` or `.jpg` image, outputting a new `stego-image.png` with the hidden message
+- **ReadImage.java** — takes a stego image, extracts the LSB from each pixel in sequence, and reconstructs the original plaintext
+
+## Requirements
+
+- Java 8 or later
+- No external dependencies — uses only the standard `javax.imageio` and `java.awt` libraries
 
 ## Usage
-1. Compile the java files:
+
+**1. Compile**
 ```bash
-javac WriteImage.java
-javac ReadImage.java
+javac WriteImage.java ReadImage.java
 ```
 
-2. Encode using ```java WriteImage```, entering the filenames of the plaintext text file and the image to hide the plaintext in when prompted
-3. Decode using ```java ReadImage``` entering the filename of the image with the hidden plaintext when prompted
+**2. Encode a message**
+
+Add a tilde `~` to the end of your plaintext file — this acts as the termination character so the decoder knows where the message ends.
+
+```
+Hello, this is a secret message.~
+```
+
+Then run:
+```bash
+java WriteImage
+```
+You will be prompted for the plaintext file path and the carrier image path. The encoded image is saved as `stego-image.png`.
+
+**3. Decode a message**
+```bash
+java ReadImage
+```
+You will be prompted for the path to the stego image. The hidden message is printed to stdout.
+
+## Limitations
+
+- **Capacity** — each pixel stores 1 bit, so a message of N characters requires at least `N * 8` pixels. A 100×100 image (10,000 pixels) can hold up to 1,250 characters.
+- **Lossless images only** — the carrier image must be lossless (PNG). JPEG compression destroys the LSBs, corrupting the hidden data. The encoder always outputs PNG regardless of the input format.
+- **ASCII only** — the current implementation encodes standard 8-bit ASCII characters.
+- **No encryption** — this is steganography, not cryptography. The message is hidden but not encrypted. Anyone who knows to look for LSB-encoded data can read it.

@@ -47,7 +47,7 @@ public class WriteImage {
             for (int i = 0; i < input.length(); i++) {
                 // Get ASCII value of the character
                 int asciiValue = input.charAt(i);
-                if (asciiValue == 8201) break;
+                if (asciiValue == '~') break;
                 // Convert the ASCII value to binary, and ensure it's 8 bits long
                 String binary = String.format("%8s", Integer.toBinaryString(asciiValue)).replace(' ', '0');
                 
